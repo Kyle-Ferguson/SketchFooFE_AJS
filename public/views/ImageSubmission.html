@@ -19,7 +19,11 @@
         }
     </style>
     <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-    <script src="http://rehket.asuscomm.com:3000/static/js/base64ArrayBuffer.js"></script>
+
+    <script src="http://rehket.asuscomm.com:3000/static/js/base64ArrayBuffer.js">
+        // This needs to be served from a server. It is included in the ../script/js/base64ArrayBuffer.js
+    </script>
+
     <script src="https://code.createjs.com/easeljs-0.8.2.min.js"></script>
 
 </head>
@@ -29,11 +33,14 @@
 <canvas id="InputCanvas" width="256" height="256"></canvas>
 <canvas id="OutputCanvas" width="256" height="256"></canvas>
 <input id="myFile" name="myFile" type="file" onchange=loadImageToCanvas(event)>
+<!--The link being called in the packageAndSend method should be the address:port of the server hosting the image translator.-->
 <input id="mySubmitButton" type="button" value="Submit" onclick = packageAndSend('http://rehket.asuscomm.com:8000','cuhk_faces')>
 </body>
 
 <script>
     'use strict';
+
+
     function convertBase64ToBinary(str) {
         // Atob decodes a base 64 encoded string.
         let binaryString = atob(str);
@@ -54,6 +61,8 @@
         for(let i = 0; i < binStr.length; i++) {
             myNewBinStr.push(String.fromCharCode(binStr[i]))
         }
+        // Does not support URL safe encoding,
+        // using the script at https://gist.github.com/jonleighton/958841
         return btoa(String(myNewBinStr))
     }
 
@@ -153,28 +162,5 @@
         stage.addChild(circle);
         stage.update();
     }
-
-    function reqListener () {
-        console.log(this.responseText);
-    }
-
-    // Get the image ready to send and then send it.
-    function submitImage() {
-        let form = new FormData();
-        let myData = myContext.toDataURL('image/png');
-
-        form.append('image', myData);
-
-        let myRequest = new XMLHttpRequest();
-
-        myRequest.open();
-        //When the request is loaded, print it to console.
-        myRequest.addEventListener("load", reqListener);
-
-        myRequest.setRequestHeader()
-    }
-
-
-
 
 </script>
