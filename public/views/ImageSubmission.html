@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Submit Images To the NN</title>
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            border: 0;
+            overflow: hidden; /*  Disable scrollbars */
+            display: block;  /* No floating content on sides */
+            background-color: #666666;
+
+        }
+        canvas {
+            border: 1px solid #000000;
+        }
+    </style>
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="http://rehket.asuscomm.com:3000/static/js/base64ArrayBuffer.js"></script>
+    <script src="https://code.createjs.com/easeljs-0.8.2.min.js"></script>
+
+</head>
+
+<body onload="init();">
+
+<canvas id="InputCanvas" width="256" height="256"></canvas>
+<canvas id="OutputCanvas" width="256" height="256"></canvas>
+<input id="myFile" name="myFile" type="file" onchange=loadImageToCanvas(event)>
+<input id="mySubmitButton" type="button" value="Submit" onclick = packageAndSend('http://rehket.asuscomm.com:8000','cuhk_faces')>
+</body>
+
+<script>
+    'use strict';
+    function convertBase64ToBinary(str) {
+        // Atob decodes a base 64 encoded string.
+        let binaryString = atob(str);
+
+        let bin = new Uint8Array(binaryString.length);
+
+        for(let i = 0; i < bin.length; i++) {
+            bin[i] = binaryString.charCodeAt(i)
+        }
+        return bin;
+    }
+
+    // Convert a binary string to a base 64 string.
+    //Broken for URL safe encoding????
+    function convertBinaryToBase64(binStr) {
+        console.log(binStr);
+        let myNewBinStr = [];
+        for(let i = 0; i < binStr.length; i++) {
+            myNewBinStr.push(String.fromCharCode(binStr[i]))
+        }
+        return btoa(String(myNewBinStr))
+    }
+
+
+    // When the file input element calls the changed event, this function creates a new file reader,
+    // and loads the image to the canvas.
+    function loadImageToCanvas(e) {
+        let reader = new FileReader();
+        let myCanvas = document.getElementById('InputCanvas');
+        let myContext = myCanvas.getContext('2d');
+        console.log('Event Fired');
+        console.log(e);
+        reader.onload = function(e) { // Step 2, the File Reader loads
+            console.log('Reader Loaded');
+            let img = new Image();
+            img.onload = function () {   // Step 4, the reader loads.
+                console.log('Image Loaded');
+                myContext.drawImage(img, 0, 0, img.width, img.height, 0, 0, myCanvas.width, myCanvas.height);
+                packageImage(myCanvas);
+            };
+            // console.log(e.target.result);
+            img.src = e.target.result;  // Step 3
+        };
+
+        reader.readAsDataURL(e.target.files[0]); // Step 1, reader reads the file(s) we selected.
+
+    }
+
+    // This function will take a canvas element, and package the image so it can be processed by the neural network.
+    function packageImage(img) {
+        let input = img.toDataURL("img/png");
+        //console.log('Data Url:\n' + input)
+        let base64_input = input.replace(/^data:image\/png;base64,/, "");
+        //console.log('Stripped input: ' + input);
+
+        let bin_string = convertBase64ToBinary(base64_input);
+        //console.log('Binary String : ' + bin_string);
+
+        return bin_string;
+    }
+
+    // Create a new XMLHTTPRequest
+    function createRequest(targetURL, model, data) {
+        let reqInProgress = true;
+
+        console.log('Request being created: ' + targetURL + '/' + model);
+        let request = new XMLHttpRequest();
+        //We are creating a post request that will be sent to the target model url.
+        request.open('POST', targetURL + '/' + model, true);
+
+        request.setRequestHeader('Content-Type', 'image/png');
+
+        request.responseType = 'arraybuffer';
+
+        request.timeout = 45000;
+
+        request.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                console.log('Request is complete!');
+                let output = new Uint8Array(this.response);
+                let output_b64 = base64ArrayBuffer(output);
+                let img = new Image();
+                // console.log('Output data is: ' + output_b64);
+                img.onload = function() {
+                    // console.log('Image Loaded');
+                    let resultCanvas = document.getElementById('OutputCanvas');
+                    let resultContext = resultCanvas.getContext('2d');
+                    resultContext.drawImage(img, 0, 0);
+                };
+                img.onerror = function() {
+                    console.log('An Error occurred.');
+                };
+                console.log("data:image\/png;base64," + output_b64);
+                img.src = "data:image\/png;base64," + output_b64;
+
+            }
+        };
+
+
+        request.send(data);
+    }
+
+    // Helper function to package and send the request.
+    function packageAndSend(targetURL, model){
+        let packagedImage = packageImage(document.getElementById('InputCanvas'));
+        createRequest(targetURL, model, packagedImage);
+
+    }
+
+    // Init the Canvas
+    function init() {
+        let stage = new createjs.Stage('demoCanvas');
+        let circle = new createjs.Shape();
+        circle.graphics.beginFill('DeepSkyBlue').drawCircle(0, 0, 50);
+        circle.x = 100;
+        circle.y = 100;
+        stage.addChild(circle);
+        stage.update();
+    }
+
+    function reqListener () {
+        console.log(this.responseText);
+    }
+
+    // Get the image ready to send and then send it.
+    function submitImage() {
+        let form = new FormData();
+        let myData = myContext.toDataURL('image/png');
+
+        form.append('image', myData);
+
+        let myRequest = new XMLHttpRequest();
+
+        myRequest.open();
+        //When the request is loaded, print it to console.
+        myRequest.addEventListener("load", reqListener);
+
+        myRequest.setRequestHeader()
+    }
+
+
+
+
+</script>
