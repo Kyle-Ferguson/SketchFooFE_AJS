@@ -1,0 +1,64 @@
+<html>
+
+	<head>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+		<link href="main.css" rel="stylesheet" />
+
+		<link rel="icon" href="favicon.ico?v=2" />
+
+	</head>
+		
+	<body>
+
+		<div id="list" class="container-fluid">
+			<div class="row">
+				<br><br>
+				<button id="selectMode" class="col-xs-12 col-sm-12 btn btn-default">pix2pix</button><br><br>
+				<button class="col-xs-12 col-sm-12 btn btn-default">Examples</button><br><br>
+				<button class="col-xs-12 col-sm-12 btn btn-default">About Us</button><br><br>
+			</div>
+		</div>
+
+		<div id="mode" class="container-fluid">
+			<div class="row">
+				<br><br>
+				<a href="#!AtoB" class="col-xs-12 col-sm-12 btn btn-default">Sketches to Faces</a><br><br>
+				<a href="#!BtoA" class="col-xs-12 col-sm-12 btn btn-default">Faces to Sketches</a><br><br>
+				<button id="modeCancel" class="col-xs-12 col-sm-12 btn btn-default">Cancel</button>
+			</div>
+
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+	<script>
+
+	$(function(){
+
+		$("#mode").hide();
+
+		$("#selectMode").click(function(){
+			$("#list").slideToggle(150);
+			$("#mode").slideToggle(150);
+		});
+
+		$("#modeCancel").click(function(){
+			$("#list").slideToggle(150);
+			$("#mode").slideToggle(150);
+		});
+
+	});
+
+	</script>
+
+	</body>
+	
+
+</html>

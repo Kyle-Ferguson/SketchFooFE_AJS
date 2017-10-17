@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.js"></script>
+
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+		<link href="main.css" rel="stylesheet" />
+
+		<link rel="icon" href="favicon.ico?v=2" />
+	</head>
+
+	<body>
+		<br>
+		<div class="container-fluid">
+			<div class="text-center">
+			<img id="result" src="uploads/test.jpg" style="max-width:100%; height: auto;">
+			</div>
+			<br><br>
+			<div class="text-left">
+				How realistic would you say the result is?
+				<div class="radio">
+					<label><input type="radio" name="optradio">Very realistic</label>
+				</div>
+				<div class="radio">
+					<label><input type="radio" name="optradio">Somewhat realitic</label>
+				</div>
+				<div class="radio">
+					<label><input type="radio" name="optradio">Unsure</label>
+				</div>
+				<div class="radio">
+					<label><input type="radio" name="optradio">Somewhat unrealitic</label>
+				</div>
+				<div class="radio">
+					<label><input type="radio" name="optradio">Very unrealitic</label>
+				</div>
+			</div>
+			<br>
+			<div class="text-left">
+				Would you allow this result to be used in future training procedures?
+				<div class="radio">
+					<label><input type="radio" name="optradio2">Yes</label>
+				</div>
+				<div class="radio">
+					<label><input type="radio" name="optradio2">No</label>
+
+			</div>
+
+			<br>
+			<a  href="uploads/test.jpg" class="btn btn-success" download="download.jpg">Download Image</a>
+			<div ng-click="share()" class="btn btn-info clearfix">Share to Facebook</div>
+
+			<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="large" data-text="Translate Sketch Into Realistic Face!" data-url="https://s3.amazonaws.com/aws-website-sketchfoo-ecw9b/index.html" data-hashtags="SketchFoo" data-show-count="false">Tweet</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+		</div>
+		<br>
+
+	</body>
+
+</html>
